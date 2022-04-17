@@ -50,5 +50,5 @@ func main() {
 	baseserver := app.Group("/project1")
 	usercontroller.UserRoutes(baseserver)
 
-	log.Fatal(app.Run(":9090"))
+	log.Fatal(app.Run(config.EnvPort()))
 }

@@ -33,3 +33,12 @@ func EnvCollectionname() string {
 
 	return os.Getenv("COLLECTION_NAME")
 }
+
+func EnvPort() string {
+	err := godotenv.Load()
+	if err != nil {
+		fmt.Println("Error loading .env file")
+	}
+
+	return os.Getenv("PORT")
+}
