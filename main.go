@@ -41,10 +41,12 @@ func init() {
 	usercollection = mongoclient.Database(config.EnvDBname()).Collection(config.EnvCollectionname())
 	userservice = services.NewUserService(usercollection, ctx)
 	usercontroller = controllers.New(userservice)
+	gin.SetMode(gin.ReleaseMode)
 	app = gin.Default()
 }
 
 func main() {
+
 	defer mongoclient.Disconnect(ctx)
 
 	baseserver := app.Group("/project1")
