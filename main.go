@@ -7,6 +7,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -37,7 +38,6 @@ func init() {
 		log.Fatal(err)
 	}
 	fmt.Println("MongoDB Connected !")
-
 	usercollection = mongoclient.Database(config.EnvDBname()).Collection(config.EnvCollectionname())
 	userservice = services.NewUserService(usercollection, ctx)
 	usercontroller = controllers.New(userservice)
@@ -45,12 +45,16 @@ func init() {
 	app = gin.Default()
 }
 
+func welcome(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{"message": "hello Meen"})
+}
+
 func main() {
 
 	defer mongoclient.Disconnect(ctx)
-
-	baseserver := app.Group("/project1")
+	app.GET("/", welcome)
+	baseserver := app.Group("/api")
 	usercontroller.UserRoutes(baseserver)
 
-	log.Fatal(app.Run(config.EnvPort()))
+	log.Fatal(app.Run(":" + config.EnvPort()))
 }
